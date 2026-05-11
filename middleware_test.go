@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	mw "github.com/traefik-plugins/traefikgeoip2"
+	mw "github.com/sonntam/traefikgeoip2"
 )
 
 const (

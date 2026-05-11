@@ -148,6 +148,8 @@ func (mw *TraefikGeoIP2) ServeHTTP(reqWr http.ResponseWriter, req *http.Request)
 			region:     coalesce(mw.privateIPRegion, Unknown),
 			city:       coalesce(mw.privateIPCity, Unknown),
 			postalCode: coalesce(mw.privateIPPostalCode, Unknown),
+			latitude:   Unknown,
+			longitude:  Unknown,
 		}
 
 	default:
@@ -156,13 +158,13 @@ func (mw *TraefikGeoIP2) ServeHTTP(reqWr http.ResponseWriter, req *http.Request)
 		mw.mu.RUnlock()
 
 		if currentLookup == nil {
-			res = &GeoIPResult{country: Unknown, region: Unknown, city: Unknown, postalCode: Unknown}
+			res = &GeoIPResult{country: Unknown, region: Unknown, city: Unknown, postalCode: Unknown, latitude: Unknown, longitude: Unknown}
 		} else {
 			var err error
 			res, err = currentLookup(net.ParseIP(ipStr))
 			if err != nil {
 				log.Printf("[geoip2] lookup failed: ip=%s, err=%v", ipStr, err)
-				res = &GeoIPResult{country: Unknown, region: Unknown, city: Unknown, postalCode: Unknown}
+				res = &GeoIPResult{country: Unknown, region: Unknown, city: Unknown, postalCode: Unknown, latitude: Unknown, longitude: Unknown}
 			}
 		}
 	}
@@ -171,6 +173,8 @@ func (mw *TraefikGeoIP2) ServeHTTP(reqWr http.ResponseWriter, req *http.Request)
 	req.Header.Set(RegionHeader, res.region)
 	req.Header.Set(CityHeader, res.city)
 	req.Header.Set(PostalCodeHeader, res.postalCode)
+	req.Header.Set(LatitudeHeader, res.latitude)
+	req.Header.Set(LongitudeHeader, res.longitude)
 	req.Header.Set(IPAddressHeader, ipStr)
 	req.Header.Set(PrivateIPHeader, boolToStr(private))
 

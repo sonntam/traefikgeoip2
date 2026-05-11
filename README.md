@@ -16,7 +16,7 @@ and
 
 ## Features
 
-- Country, region, city and **postal/ZIP code** enrichment via request headers
+- Country, region, city, **postal/ZIP code** and **latitude/longitude** enrichment via request headers
 - Configurable **private / LAN IP override** — skips the DB lookup entirely and returns
   operator-defined location values instead
 - New `X-GeoIP2-PrivateIP` header flags whether the lookup was performed or bypassed
@@ -39,11 +39,14 @@ The following headers are set on every request passed through this middleware:
 | `X-GeoIP2-Region` | ISO 3166-2 subdivision code (e.g. `BW`). `XX` if unknown or Country DB. |
 | `X-GeoIP2-City` | English city name (e.g. `Stuttgart`). `XX` if unknown or Country DB. |
 | `X-GeoIP2-PostalCode` | Postal / ZIP code (e.g. `70173`). `XX` if unknown or Country DB. |
+| `X-GeoIP2-Latitude` | Latitude in decimal degrees (e.g. `48.7758`). `XX` if unknown or Country DB. |
+| `X-GeoIP2-Longitude` | Longitude in decimal degrees (e.g. `9.1829`). `XX` if unknown or Country DB. |
 | `X-GeoIP2-IPAddress` | Resolved client IP that was used for the lookup. |
 | `X-GeoIP2-PrivateIP` | `true` when the IP is private/LAN/loopback and no DB lookup was done. |
 
-> **Note:** Postal codes are only available with a `GeoLite2-City.mmdb` or `GeoIP2-City.mmdb`
-> database. The Country DB always returns `XX` for region, city and postal code.
+> **Note:** Postal codes and latitude/longitude are only available with a `GeoLite2-City.mmdb`
+> or `GeoIP2-City.mmdb` database. The Country DB always returns `XX` for region, city,
+> postal code, latitude and longitude.
 
 ---
 
@@ -201,6 +204,10 @@ golangci-lint run
 ---
 
 ## Changelog
+
+### v2.2.0
+
+- **New:** `X-GeoIP2-Latitude` and `X-GeoIP2-Longitude` headers (populated from `GeoLite2-City.mmdb`)
 
 ### v2.1.0
 

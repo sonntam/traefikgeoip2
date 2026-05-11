@@ -1,4 +1,4 @@
-module github.com/traefik-plugins/traefikgeoip2
+module github.com/sonntam/traefikgeoip2
 
 go 1.25
 
